@@ -1,6 +1,5 @@
 import React from 'react';
 import { Hyperspeed, TrueFocus } from '@appletosolutions/reactbits';
-import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -41,11 +40,12 @@ const Login = () => {
             />
         </div>
         <div className='flex absolute top-100 sm:top-100 w-full justify-center items-center z-[999] '>
-          <div className='rounded-4xl border-[0.5px] border-white hover:backdrop-blur-sm cursor-pointer h-15 w-[150px] p-2'>
+          <div onClick={handleHome}
+           className='rounded-4xl border-[0.5px] border-white shadow-sm hover:backdrop-blur-sm cursor-pointer h-15 w-[150px] p-2'>
             <p className='text-white font-extrabold text-[16px] text-center mt-2'>INICIAR</p>
           </div>
         </div>
-        <div className='absolute top-0 left-0 w-full h-full inset-0'>
+        <div className='hidden sm:flex absolute top-0 left-0 w-full h-full inset-0 clip-fade'>
             <Hyperspeed
                 effectOptions={{
                     length: 400,
