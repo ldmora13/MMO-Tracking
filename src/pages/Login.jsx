@@ -1,20 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Hyperspeed, TrueFocus, BlurText } from "@appletosolutions/reactbits";
 import googlelogo from "../assets/google.svg"
+import { motion, AnimatePresence } from 'framer-motion';
+
+import { supabase } from '../lib/supabaseClient'
 
 
 
 const Login = () => {
 
-  const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
-  const toggleVisibility = () => {
-    setIsVisible(!isVisible);
-  };
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    })
+    navigate("/home")
+    if (error) console.error('Error al iniciar sesión:', error.message)
+  }
 
   return (
     <div className="h-screen w-screen flex justify-center bg-[#171717] overflow-hidden">
-      <div className="absolute top-0 left-0 w-1/2 h-full inset-0 [mask-image:linear-gradient(to_right,black_50%,transparent)]">
+    <AnimatePresence>
+      <motion.div 
+        className="absolute hidden md:flex top-0 left-0 w-full h-full inset-0 [mask-image:linear-gradient(to_right,black_50%,transparent)] overflow-hidden" 
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        >
         <Hyperspeed
           effectOptions={{
             length: 400,
@@ -52,51 +67,47 @@ const Login = () => {
             },
           }}
         />
-      </div>
-      <div className="flex flex-col items-center justify-center absolute top-0 right-0 w-1/2 h-full">
-          <BlurText
-            text="Login"
-            delay={500}
-            animateBy="letters"
-            stepDuration={0.35}
-            onAnimationComplete={toggleVisibility}
-            direction="top"
-            className="text-4xl mb-8 text-white font-semibold absolute top-10 right-[43%]"
-          />
-          {isVisible && (
-            <div className="flex flex-col border-2 border-white rounded-2xl text-white ">
-              <form className="p-5 gap-5 flex flex-col items-center">
-                <input type="text" placeholder="E-mail" 
-                  className="h-12 px-4 text-black rounded-xl bg-[#F3F3F3] font-semibold outline-none focus:shadow-[0_0_10px_rgba(45,64,75,1)]"
-                />
-                <input type="password" placeholder="Password" 
-                  className="h-12 px-4 text-black rounded-xl bg-[#F3F3F3] font-semibold outline-none focus:shadow-[0_0_10px_rgba(45,64,75,1)]"
-                />
-                <button type="button"
-                  className={`px-6 py-2 cursor-pointer overflow-hidden border-2 border-gray-200 rounded-xl bg-gray-50 text-gray-800 text-lg font-semibold shadow-xl relative z-10
-                    before:absolute before:w-0 before:h-full before:top-0 before:left-0 before:bg-[#171717] before:transition-all before:duration-500 before:rounded-xl
-                    hover:before:w-full hover:text-white`}>
-                  <span className="relative z-10 flex items-center gap-2">
-                    Continuar
-                  </span>
-                </button>
-                <p className="flex items-center hover:scale-110 transition cursor-pointer">
-                    Registrarse
-                </p>
-              </form>
-              <div className='flex justify-between items-center'>
-                <div className='h-1 w-[20%] -ml-[0.5px] border-0 bg-gradient-to-r from-[#F3F3F3] to-transparent'></div>
-                <p className='text-center text-sm'>O inicia sesión con</p>
-                <div className='h-1 w-[20%] -mr-[0.5px] border-0 bg-gradient-to-r from-transparent to-[#F3F3F3]'></div>
-              </div>
-              <div className="flex justify-center p-3">
-                <button id="btn-google" className="p-2 px-4 rounded-md bg-[#171717] text-white hover:bg-black hover:scale-110 transition">
-                  <img src={googlelogo} className="w-[40px]" alt="Google login"/>
-                </button>
-              </div>
+      </motion.div>
+      <motion.div 
+        className="flex flex-col items-center justify-center absolute top-0 right-0 w-full h-full overflow-hidden"
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
+        <p className="text-4xl text-white font-extrabold mb-8">Login</p>
+          <div className="flex flex-col border-2 border-white rounded-2xl text-white backdrop-blur-2xl">
+            <form className="p-5 gap-5 flex flex-col items-center">
+              <input type="text" placeholder="E-mail" 
+                className="h-12 px-4 text-black rounded-xl bg-[#F3F3F3] font-semibold outline-none focus:shadow-[0_0_10px_rgba(45,64,75,1)]"
+              />
+              <input type="password" placeholder="Password" 
+                className="h-12 px-4 text-black rounded-xl bg-[#F3F3F3] font-semibold outline-none focus:shadow-[0_0_10px_rgba(45,64,75,1)]"
+              />
+              <button type="button"
+                className={`px-6 py-2 cursor-pointer overflow-hidden border-2 border-gray-200 rounded-xl bg-gray-50 text-gray-800 text-lg font-semibold shadow-xl relative z-10
+                  before:absolute before:w-0 before:h-full before:top-0 before:left-0 before:bg-[#171717] before:transition-all before:duration-500 before:rounded-xl
+                  hover:before:w-full hover:text-white`}>
+                <span className="relative z-10 flex items-center gap-2">
+                  Continuar
+                </span>
+              </button>
+              <p className="flex items-center hover:scale-110 transition cursor-pointer">
+                  Registrarse
+              </p>
+            </form>
+            <div className='flex justify-between items-center'>
+              <div className='h-1 w-[20%] -ml-[0.5px] border-0 bg-gradient-to-r from-[#F3F3F3] to-transparent'></div>
+              <p className='text-center text-sm'>O inicia sesión con</p>
+              <div className='h-1 w-[20%] -mr-[0.5px] border-0 bg-gradient-to-r from-transparent to-[#F3F3F3]'></div>
             </div>
-            )}
-      </div>
+            <div className="flex justify-center p-3">
+              <button id="btn-google" onClick={handleGoogleLogin} className="p-2 px-4 rounded-md bg-[#171717] text-white hover:bg-black hover:scale-110 transition">
+                <img src={googlelogo} className="w-[40px]" alt="Google login"/>
+              </button>
+            </div>
+          </div>
+      </motion.div>
+      </AnimatePresence>
     </div>
   );
 };

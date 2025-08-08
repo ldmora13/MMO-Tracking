@@ -3,5 +3,5 @@
 body{
     background-color: #171717;
     font-family: "Fira Code", monospace;
+    overflow: hidden;
 }
-
